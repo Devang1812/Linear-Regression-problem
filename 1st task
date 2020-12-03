@@ -1,0 +1,53 @@
+#importing libraries
+import pandas as pd
+import numpy as np
+import matplotlib.pyplot as plt
+from sklearn.linear_model import LinearRegression
+from sklearn.model_selection import train_test_split
+from sklearn.metrics import mean_absolute_error
+
+#importing data
+url="http://bit.ly/w-data"
+data=pd.read_csv(url)
+data
+
+#preparing data
+x=np.array(data.Hours)
+y=np.array(data.Scores)
+x1=x.reshape(-1,1)
+y1=y.reshape(-1,1)
+
+#plotting scatterplot 
+plt.scatter(x,y)
+plt.xlabel("Number of hours")
+plt.ylabel("Scores of students")
+plt.title("Marks vs Hours")
+
+#preparing data
+x_train,x_test,y_train,y_test=train_test_split(x1,y1,test_size=0.3,random_state=0)
+
+#building a model
+model=LinearRegression()
+l1=model.fit(x_train,y_train)
+preds=l1.predict(x_test)
+print("predictions are=",preds)
+
+#predicting the given values
+Hour=np.array([9.25])
+Hours=Hour.reshape(-1,1)
+prediction=l1.predict(Hours)
+print("Predicted Value is",prediction)
+
+
+#calculating error
+Error=mean_absolute_error(y_test,preds)
+print("Error is:",Error)
+
+#plotting the final result 
+line=l1.coef_*x1+l1.intercept_
+plt.scatter(x1,y1)
+plt.plot(x1,line);
+plt.show()
+
+#here the slope of line is [[9.78856669]] and intercept is [2.37081538]
+#therefore ,equation of best fit line is 9.7886x+2.370816
